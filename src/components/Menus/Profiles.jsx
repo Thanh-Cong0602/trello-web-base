@@ -10,6 +10,7 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
 import React from 'react'
+import AvatarUser from '~/assets/avatar_2.jpg'
 
 const Profiles = () => {
   const [anchorEl, setAnchorEl] = React.useState(null)
@@ -32,7 +33,9 @@ const Profiles = () => {
           aria-haspopup='true'
           aria-expanded={open ? 'true' : undefined}
         >
-          <Avatar sx={{ width: 32, height: 32 }}>C</Avatar>
+          <Avatar src={AvatarUser} alt='Thanh Cong Nguyen' sx={{ width: 34, height: 34 }}>
+            C
+          </Avatar>
         </IconButton>
       </Tooltip>
       <Menu
