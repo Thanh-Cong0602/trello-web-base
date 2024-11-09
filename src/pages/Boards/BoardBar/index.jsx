@@ -13,13 +13,13 @@ import Chip from '@mui/material/Chip'
 import AvatarUser from '~/assets/Avatar.jpg'
 
 const MENU_STYPES = {
-  color: 'primary.main',
-  bgcolor: 'white',
+  color: 'white',
+  bgcolor: 'transparent',
   border: 'none',
   px: '5px',
   borderRadius: '4px',
-  '& .MuiSvgIcon-root': {
-    color: 'primary.main'
+  '.MuiSvgIcon-root': {
+    color: 'white'
   },
   '&:hover': {
     backgroundColor: 'primary.50'
@@ -37,7 +37,8 @@ const BoardBar = () => {
         justifyContent: 'space-between',
         gap: 2,
         overflow: 'auto',
-        borderTop: '1px solid #00bfa5'
+        bgcolor: theme => (theme.palette.mode === 'dark' ? '#34495e' : '#1976d2'),
+        borderBottom: '1px solid white'
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -48,17 +49,23 @@ const BoardBar = () => {
         <Chip icon={<FilterListIcon />} sx={MENU_STYPES} label='Filter' clickable />
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-        <Button variant='outlined' startIcon={<PersonAddIcon />}>
-          Create
+        <Button
+          variant='outlined'
+          startIcon={<PersonAddIcon />}
+          sx={{ color: 'white', borderColor: 'white', '&:hover': { borderColor: 'white' } }}
+        >
+          Invite
         </Button>
 
         <AvatarGroup
           max={7}
           sx={{
+            gap: '10px',
             '& .MuiAvatar-root': {
               width: 34,
               height: 34,
-              fontSize: '16px'
+              fontSize: 16,
+              border: 'none'
             }
           }}
         >

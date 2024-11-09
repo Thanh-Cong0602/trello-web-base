@@ -33,7 +33,7 @@ const Profiles = () => {
           aria-haspopup='true'
           aria-expanded={open ? 'true' : undefined}
         >
-          <Avatar src={AvatarUser} alt='Thanh Cong Nguyen' sx={{ width: 34, height: 34 }}>
+          <Avatar src={AvatarUser} alt='Thanh Cong Nguyen' sx={{ width: 36, height: 36 }}>
             C
           </Avatar>
         </IconButton>

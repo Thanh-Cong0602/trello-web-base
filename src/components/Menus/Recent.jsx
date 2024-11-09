@@ -23,6 +23,7 @@ const Recent = () => {
     <Box>
       <Button
         id='basis-button-recent'
+        sx={{ color: 'white' }}
         aria-controls={open ? 'basic-menu-recent' : undefined}
         aria-haspopup='true'
         aria-expanded={open ? 'true' : undefined}
