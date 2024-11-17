@@ -11,6 +11,7 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
 import AvatarUser from '~/assets/Avatar.jpg'
+import { capitalizeFirstLetter } from '~/utils/formatters'
 
 const MENU_STYPES = {
   color: 'white',
@@ -25,7 +26,9 @@ const MENU_STYPES = {
     backgroundColor: 'primary.50'
   }
 }
-const BoardBar = () => {
+const BoardBar = props => {
+  const { board } = props
+
   return (
     <Box
       sx={{
@@ -37,12 +40,17 @@ const BoardBar = () => {
         justifyContent: 'space-between',
         gap: 2,
         overflow: 'auto',
-        bgcolor: theme => (theme.palette.mode === 'dark' ? '#34495e' : '#1976d2'),
+        bgcolor: theme => (theme.palette.mode === 'dark' ? '#34495e' : '#1976d2')
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-        <Chip icon={<DashboardIcon />} sx={MENU_STYPES} label='Thanh Cong Nguyen' clickable />
-        <Chip icon={<VpnLockIcon />} sx={MENU_STYPES} label='Public/Private Workspace' clickable />
+        <Chip icon={<DashboardIcon />} sx={MENU_STYPES} label={board?.title} clickable />
+        <Chip
+          icon={<VpnLockIcon />}
+          sx={MENU_STYPES}
+          label={capitalizeFirstLetter(board?.type)}
+          clickable
+        />
         <Chip icon={<AddToDriveIcon />} sx={MENU_STYPES} label='Add to Google Drive' clickable />
         <Chip icon={<FormatBoldIcon />} sx={MENU_STYPES} label='Automation' clickable />
         <Chip icon={<FilterListIcon />} sx={MENU_STYPES} label='Filter' clickable />

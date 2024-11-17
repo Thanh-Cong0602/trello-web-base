@@ -9,23 +9,10 @@ import CardMedia from '@mui/material/CardMedia'
 import Typography from '@mui/material/Typography'
 import Starlento from '~/assets/Starlento.jpg'
 
-const Card = ({ temporaryHiddenMedia }) => {
-  if (temporaryHiddenMedia) {
-    return (
-      <MuiCard
-        sx={{
-          cursor: 'pointer',
-          boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)',
-          overflow: 'unset'
-        }}
-      >
-        <CardContent sx={{ p: 1.5, '&:last-child': { p: 1.5 } }}>
-          <Typography>Card test 01</Typography>
-        </CardContent>
-      </MuiCard>
-    )
+const Card = ({ card }) => {
+  const shouldShowCardActions = () => {
+    return !!card?.memberIds?.length || !!card?.comments?.length || !!card?.attachments?.length
   }
-
   return (
     <MuiCard
       sx={{
@@ -34,21 +21,31 @@ const Card = ({ temporaryHiddenMedia }) => {
         overflow: 'unset'
       }}
     >
-      <CardMedia sx={{ height: 140 }} image={Starlento} title='green iguana' />
+      {card?.cover && <CardMedia sx={{ height: 140 }} image={Starlento} />}
+
       <CardContent sx={{ p: 1.5, '&:last-child': { p: 1.5 } }}>
-        <Typography>Thanh Cong Nguyen Dev</Typography>
+        <Typography>{card?.title}</Typography>
       </CardContent>
-      <CardActions sx={{ p: '0 4px 8px 4px' }}>
-        <Button size='small' startIcon={<GroupIcon />}>
-          20
-        </Button>
-        <Button size='small' startIcon={<CommentIcon />}>
-          15
-        </Button>
-        <Button size='small' startIcon={<AttachmentIcon />}>
-          10
-        </Button>
-      </CardActions>
+      {shouldShowCardActions() && (
+        <CardActions sx={{ p: '0 4px 8px 4px' }}>
+          {!!card?.memberIds?.length && (
+            <Button size='small' startIcon={<GroupIcon />}>
+              20
+            </Button>
+          )}
+          {!!card?.comments?.length && (
+            <Button size='small' startIcon={<CommentIcon />}>
+              15
+            </Button>
+          )}
+
+          {!!card?.attachments?.length && (
+            <Button size='small' startIcon={<AttachmentIcon />}>
+              10
+            </Button>
+          )}
+        </CardActions>
+      )}
     </MuiCard>
   )
 }

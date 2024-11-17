@@ -16,14 +16,16 @@ import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 import { useState } from 'react'
+import { mapOrder } from '~/utils/sort'
 import ListCards from './ListCards/ListCards'
 
-const Column = () => {
+const Column = ({ column }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
   const handleClick = event => setAnchorEl(event.currentTarget)
   const handleClose = () => setAnchorEl(null)
 
+  const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
   return (
     <Box
       sx={{
@@ -47,7 +49,7 @@ const Column = () => {
         }}
       >
         <Typography variant='h6' sx={{ fontWeight: 'bold', cursor: 'pointer', fontSize: '1rem' }}>
-          Column Title
+          {column?.title}
         </Typography>
 
         <Box>
@@ -117,7 +119,7 @@ const Column = () => {
       </Box>
 
       {/* List Cards  */}
-      <ListCards />
+      <ListCards cards={orderedCards} />
 
       {/* Box Column Footer  */}
       <Box
