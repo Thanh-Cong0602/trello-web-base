@@ -3,12 +3,10 @@ import {
   DragOverlay,
   MouseSensor,
   TouchSensor,
-  closestCenter,
   closestCorners,
   defaultDropAnimationSideEffects,
   getFirstCollision,
   pointerWithin,
-  rectIntersection,
   useSensor,
   useSensors
 } from '@dnd-kit/core'
@@ -244,16 +242,18 @@ const BoardContent = ({ board }) => {
       /* Tìm các điểm giao nhau, va chạm - intersections với con trỏ */
       const pointerIntersections = pointerWithin(args)
 
-      /* Thuật toán phát hiện va chạm sẽ trả về một mảng các va chạm ở đây */
-      const intersections = !!pointerIntersections?.length ? pointerIntersections : rectIntersection(args)
+      if (!pointerIntersections?.length) return
 
-      /* Tìm overId đầu tiên trong intersections ở trên */
-      let overId = getFirstCollision(intersections, 'id')
+      /* Thuật toán phát hiện va chạm sẽ trả về một mảng các va chạm ở đây */
+      // const intersections = !!pointerIntersections?.length ? pointerIntersections : rectIntersection(args)
+
+      /* Tìm overId đầu tiên trong pointerIntersections ở trên */
+      let overId = getFirstCollision(pointerIntersections, 'id')
 
       if (overId) {
         const checkColumn = orderedColumns.find(column => column._id === overId)
         if (checkColumn) {
-          overId = closestCenter({
+          overId = closestCorners({
             ...args,
             droppableContainers: args.droppableContainers.filter(container => {
               return container.id !== overId && checkColumn?.cardOrderIds?.includes(container.id)
