@@ -14,9 +14,7 @@ import Starlento from '~/assets/Starlento.jpg'
 const Card = ({ card }) => {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: card._id,
-    data: {
-      ...card
-    }
+    data: { ...card }
   })
 
   const dndKitCardStyles = {
@@ -39,7 +37,8 @@ const Card = ({ card }) => {
       sx={{
         cursor: 'pointer',
         boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)',
-        overflow: 'unset'
+        overflow: 'unset',
+        display: card?.FE_PlaceHolderCard ? 'none' : 'block'
       }}
     >
       {card?.cover && <CardMedia sx={{ height: 140 }} image={Starlento} />}

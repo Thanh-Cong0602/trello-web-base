@@ -12,8 +12,9 @@ import {
 } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
 import Box from '@mui/material/Box'
-import { cloneDeep } from 'loadsh'
+import { cloneDeep, isEmpty } from 'loadsh'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { generatePlaceholderCard } from '~/utils/formatters'
 import { mapOrder } from '~/utils/sort'
 import Column from './ListColumns/Column/Column'
 import Card from './ListColumns/Column/ListCards/Card/Card'
@@ -87,6 +88,15 @@ const BoardContent = ({ board }) => {
       if (nextActiveColumn) {
         /* Xóa card ở column active */
         nextActiveColumn.cards = nextActiveColumn.cards.filter(card => card._id !== activeDraggingCardId)
+
+        /* Thêm Placeholder card nếu Column rỗng: Bị kéo hết Card đi và không còn card nào nữa */
+        if (isEmpty(nextActiveColumn.cards)) {
+          nextActiveColumn.cards = [generatePlaceholderCard(nextActiveColumn)]
+        }
+
+        /* Xóa cái Placeholder Card đi nếu nó tồn tại */
+        nextActiveColumn.cards.push = nextActiveColumn.cards.filter(card => !card.FE_PlaceHolderCard)
+
         /* Cập nhật lại mảng cardOrderIds cho chuẩn dữ liệu */
         nextActiveColumn.cardOrderIds = nextActiveColumn.cards.map(card => card._id)
       }
