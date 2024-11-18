@@ -42,9 +42,10 @@ const BoardContent = ({ board }) => {
 
   /* Cùng một thời điểm chỉ có một phần tử được kéo (column hoặc card) */
   // eslint-disable-next-line no-unused-vars
-  const [activeDragItemId, setActiveDragItemId] = useState()
-  const [activeDragItemType, setActiveDragItemType] = useState()
-  const [activeDragItemData, setActiveDragItemData] = useState()
+  const [activeDragItemId, setActiveDragItemId] = useState(null)
+  const [activeDragItemType, setActiveDragItemType] = useState(null)
+  const [activeDragItemData, setActiveDragItemData] = useState(null)
+  const [oldColumnWhenDraggingCard, setOldColumnWhenDraggingCard] = useState(null)
 
   useEffect(() => {
     setOrderedColumns(mapOrder(board?.columns, board?.columnOrderIds, '_id'))
@@ -53,6 +54,7 @@ const BoardContent = ({ board }) => {
   const findColumnByCardId = cardId => {
     return orderedColumns.find(column => column?.cards?.map(card => card._id)?.includes(cardId))
   }
+
   /* Trigger khi bắt đầu kéo (drag) 1 phần tử */
   const handleDragStart = event => {
     // console.log('handleDragStart', event)
@@ -61,6 +63,11 @@ const BoardContent = ({ board }) => {
       event?.active?.data?.current?.columnId ? ACTIVE_DRAG_ITEM_TYPE.CARD : ACTIVE_DRAG_ITEM_TYPE.COLUMN
     )
     setActiveDragItemData(event?.active?.data?.current)
+
+    /* Nếu là kéo thả card mới thực hiện hành động set giá trị old column */
+    if (event?.active?.data?.current?.columnId) {
+      setOldColumnWhenDraggingCard(findColumnByCardId(event?.active?.id))
+    }
   }
 
   /* Trigger trong quá trình kéo (drag) 1 phần tử */
@@ -128,23 +135,56 @@ const BoardContent = ({ board }) => {
 
   /* Trigger khi kết thúc hành động kéo (drag) của 1 phần tử => hành động thả (drop)*/
   const handleDragEnd = event => {
-    // console.log('handleDragEnd', event)
-
-    if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD) {
-      // console.log(' Hành động kéo thả Card')
-      return
-    }
     const { active, over } = event
 
     if (!over) return
 
-    if (active.id !== over.id) {
-      // Lấy vị trí cũ (từ active)
-      const oldIndex = orderedColumns.findIndex(c => c._id === active.id)
-      // Lấy vị trí cũ (từ over)
-      const newIndex = orderedColumns.findIndex(c => c._id === over.id)
+    /* Xử lý kéo thả Card  */
+    if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD) {
+      const {
+        id: activeDraggingCardId,
+        data: { current: activeDraggingCardData }
+      } = active
 
-      const dndOrderedColumns = arrayMove(orderedColumns, oldIndex, newIndex)
+      const { id: overCardId } = over
+
+      /* Tìm 2 column theo Card Id */
+      const activeColumn = findColumnByCardId(activeDraggingCardId)
+      const overColumn = findColumnByCardId(overCardId)
+
+      if (!activeColumn || !overColumn) return
+
+      if (oldColumnWhenDraggingCard._id !== overColumn._id) {
+        console.log('Card')
+      } else {
+        /* Hành động kéo thả card trong một column */
+
+        /* Lấy vị trí cũ (từ oldColumnWhenDraggingCard) */
+        const oldCardIndex = oldColumnWhenDraggingCard?.cards?.findIndex(c => c._id === activeDragItemId)
+        /* Lấy vị trí cũ (từ over) */
+        const newCardIndex = overColumn?.cards?.findIndex(c => c._id === overCardId)
+
+        const dndOrderedColumns = arrayMove(oldColumnWhenDraggingCard?.cards, oldCardIndex, newCardIndex)
+
+        setOrderedColumns(prevColumns => {
+          const nextColumns = cloneDeep(prevColumns)
+          const targetColumn = nextColumns.find(column => column._id === overColumn._id)
+          targetColumn.cards = dndOrderedColumns
+          targetColumn.cardOrderIds = dndOrderedColumns.map(card => card._id)
+
+          return nextColumns
+        })
+      }
+    }
+
+    /* Xử lý kéo thả Column */
+    if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN && active.id !== over.id) {
+      /* Lấy vị trí cũ (từ active) */
+      const oldColumnIndex = orderedColumns.findIndex(c => c._id === active.id)
+      /* Lấy vị trí cũ (từ over) */
+      const newColumnIndex = orderedColumns.findIndex(c => c._id === over.id)
+
+      const dndOrderedColumns = arrayMove(orderedColumns, oldColumnIndex, newColumnIndex)
       // const dndOrderedColumnsIds = dndOrderedColumns.map(c => c._id)
       // console.log('dndOrderedColumns', dndOrderedColumns)
       // console.log('dndOrderedColumnsIds', dndOrderedColumnsIds)
