@@ -26,9 +26,7 @@ const MENU_STYPES = {
     backgroundColor: 'primary.50'
   }
 }
-const BoardBar = props => {
-  const { board } = props
-
+const BoardBar = ({ board }) => {
   return (
     <Box
       sx={{
@@ -44,13 +42,10 @@ const BoardBar = props => {
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-        <Chip icon={<DashboardIcon />} sx={MENU_STYPES} label={board?.title} clickable />
-        <Chip
-          icon={<VpnLockIcon />}
-          sx={MENU_STYPES}
-          label={capitalizeFirstLetter(board?.type)}
-          clickable
-        />
+        <Tooltip title={board?.description}>
+          <Chip icon={<DashboardIcon />} sx={MENU_STYPES} label={board?.title} clickable />
+        </Tooltip>
+        <Chip icon={<VpnLockIcon />} sx={MENU_STYPES} label={capitalizeFirstLetter(board?.type)} clickable />
         <Chip icon={<AddToDriveIcon />} sx={MENU_STYPES} label='Add to Google Drive' clickable />
         <Chip icon={<FormatBoldIcon />} sx={MENU_STYPES} label='Automation' clickable />
         <Chip icon={<FilterListIcon />} sx={MENU_STYPES} label='Filter' clickable />
