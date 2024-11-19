@@ -24,7 +24,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-const BoardContent = ({ board, createNewColumn, createNewCard }) => {
+const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns }) => {
   /*
    * https://docs.dndkit.com/api-documentation/sensors
    * Yêu cầu chuột di chuyển 10px thì mới kích hoạt event, fix trong trường hợp click bị gọi event
@@ -229,9 +229,11 @@ const BoardContent = ({ board, createNewColumn, createNewCard }) => {
       const newColumnIndex = orderedColumns.findIndex(c => c._id === over.id)
 
       const dndOrderedColumns = arrayMove(orderedColumns, oldColumnIndex, newColumnIndex)
-      // const dndOrderedColumnsIds = dndOrderedColumns.map(c => c._id)
+
       // console.log('dndOrderedColumns', dndOrderedColumns)
       // console.log('dndOrderedColumnsIds', dndOrderedColumnsIds)
+
+      moveColumns(dndOrderedColumns)
       setOrderedColumns(dndOrderedColumns)
     }
 
