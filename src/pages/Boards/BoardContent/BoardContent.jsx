@@ -14,7 +14,6 @@ import { cloneDeep, isEmpty } from 'loadsh'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { MouseSensor, TouchSensor } from '~/customLibraries/DnDKitSensors'
 import { generatePlaceholderCard } from '~/utils/formatters'
-import { mapOrder } from '~/utils/sort'
 import Column from './ListColumns/Column/Column'
 import Card from './ListColumns/Column/ListCards/Card/Card'
 import ListColumns from './ListColumns/ListColumns'
@@ -24,7 +23,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns }) => {
+const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns, moveCardInTheSameColumn }) => {
   /*
    * https://docs.dndkit.com/api-documentation/sensors
    * Yêu cầu chuột di chuyển 10px thì mới kích hoạt event, fix trong trường hợp click bị gọi event
@@ -53,7 +52,7 @@ const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns }) =>
   const lastOverId = useRef(null)
 
   useEffect(() => {
-    setOrderedColumns(mapOrder(board?.columns, board?.columnOrderIds, '_id'))
+    setOrderedColumns(board.columns)
   }, [board])
 
   const findColumnByCardId = cardId => {
@@ -208,16 +207,19 @@ const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns }) =>
         /* Lấy vị trí cũ (từ over) */
         const newCardIndex = overColumn?.cards?.findIndex(c => c._id === overCardId)
 
-        const dndOrderedColumns = arrayMove(oldColumnWhenDraggingCard?.cards, oldCardIndex, newCardIndex)
+        const dndOrderedCards = arrayMove(oldColumnWhenDraggingCard?.cards, oldCardIndex, newCardIndex)
+
+        const dndOrderedCardIds = dndOrderedCards.map(card => card._id)
 
         setOrderedColumns(prevColumns => {
           const nextColumns = cloneDeep(prevColumns)
           const targetColumn = nextColumns.find(column => column._id === overColumn._id)
-          targetColumn.cards = dndOrderedColumns
-          targetColumn.cardOrderIds = dndOrderedColumns.map(card => card._id)
-
+          targetColumn.cards = dndOrderedCards
+          targetColumn.cardOrderIds = dndOrderedCardIds
           return nextColumns
         })
+
+        moveCardInTheSameColumn(dndOrderedCards, dndOrderedCardIds, oldColumnWhenDraggingCard._id)
       }
     }
 
@@ -230,11 +232,9 @@ const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns }) =>
 
       const dndOrderedColumns = arrayMove(orderedColumns, oldColumnIndex, newColumnIndex)
 
-      // console.log('dndOrderedColumns', dndOrderedColumns)
-      // console.log('dndOrderedColumnsIds', dndOrderedColumnsIds)
+      setOrderedColumns(dndOrderedColumns)
 
       moveColumns(dndOrderedColumns)
-      setOrderedColumns(dndOrderedColumns)
     }
 
     setActiveDragItemId(null)
