@@ -4,9 +4,11 @@ import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import { isEmpty } from 'loadsh'
 import { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 import {
   createNewCardAPI,
   createNewColumnAPI,
+  deleteColumnDetailsAPI,
   fetchBoardDetailsAPI,
   moveCardToDifferentColumnAPI,
   updateBoardDetailsAPI,
@@ -65,6 +67,7 @@ const Board = () => {
         columnToUpdate.cardOrderIds.push(createdCard._id)
       }
     }
+    setBoard(newBoard)
   }
 
   /* Func này có nhiệm vụ gọi API và xử lý kéo thả Column xong xuôi */
@@ -114,6 +117,16 @@ const Board = () => {
     })
   }
 
+  const deleteColumnDetails = columnId => {
+    const newBoard = { ...board }
+    newBoard.columns = newBoard.columns.filter(c => c._id !== columnId)
+    newBoard.columnOrderIds = newBoard.columnOrderIds.filter(_id => _id !== columnId)
+    setBoard(newBoard)
+    deleteColumnDetailsAPI(columnId).then(res => {
+      toast.success(res?.deleteResult)
+    })
+  }
+
   if (!board) {
     return (
       <Box
@@ -143,6 +156,7 @@ const Board = () => {
         moveColumns={moveColumns}
         moveCardInTheSameColumn={moveCardInTheSameColumn}
         moveCardToDifferentColumn={moveCardToDifferentColumn}
+        deleteColumnDetails={deleteColumnDetails}
       />
     </Container>
   )
