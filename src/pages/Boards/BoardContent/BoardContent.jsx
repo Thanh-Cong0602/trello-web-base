@@ -24,7 +24,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-const BoardContent = ({ board }) => {
+const BoardContent = ({ board, createNewColumn, createNewCard }) => {
   /*
    * https://docs.dndkit.com/api-documentation/sensors
    * Yêu cầu chuột di chuyển 10px thì mới kích hoạt event, fix trong trường hợp click bị gọi event
@@ -296,7 +296,11 @@ const BoardContent = ({ board }) => {
           p: '10px 0'
         }}
       >
-        <ListColumns columns={orderedColumns} />
+        <ListColumns
+          columns={orderedColumns}
+          createNewColumn={createNewColumn}
+          createNewCard={createNewCard}
+        />
         <DragOverlay dropAnimation={customDropAnimation}>
           {!activeDragItemType && null}
 
