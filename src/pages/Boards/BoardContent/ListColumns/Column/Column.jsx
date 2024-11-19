@@ -24,7 +24,7 @@ import { toast } from 'react-toastify'
 import { mapOrder } from '~/utils/sort'
 import ListCards from './ListCards/ListCards'
 
-const Column = ({ column }) => {
+const Column = ({ column, createNewCard }) => {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column._id,
     data: {
@@ -51,12 +51,15 @@ const Column = ({ column }) => {
   const toggleNewCardForm = () => setOpenNewCardForm(!openNewCardForm)
   const [newCardTitle, setNewCardTitle] = useState('')
 
-  const addNewColumn = () => {
+  const addNewColumn = async () => {
     if (!newCardTitle) {
       toast.error('Please enter Card Title!', { position: 'bottom-right' })
       return
     }
-    console.log(newCardTitle)
+
+    const newCardData = { title: newCardTitle, columnId: column._id }
+
+    await createNewCard(newCardData)
 
     toggleNewCardForm()
     setNewCardTitle('')
