@@ -8,7 +8,7 @@ import { useState } from 'react'
 import { toast } from 'react-toastify'
 import Column from './Column/Column'
 
-const ListColumns = ({ columns, createNewColumn, createNewCard }) => {
+const ListColumns = ({ columns, createNewColumn, createNewCard, deleteColumnDetails }) => {
   const [openNewColumnForm, setOpenNewColumnForm] = useState(false)
   const toggleNewColumnForm = () => setOpenNewColumnForm(!openNewColumnForm)
   const [newColumnTitle, setNewColumnTitle] = useState('')
@@ -49,7 +49,12 @@ const ListColumns = ({ columns, createNewColumn, createNewCard }) => {
         }}
       >
         {columns?.map(column => (
-          <Column key={column._id} column={column} createNewCard={createNewCard} />
+          <Column
+            key={column._id}
+            column={column}
+            createNewCard={createNewCard}
+            deleteColumnDetails={deleteColumnDetails}
+          />
         ))}
 
         {/* Box Add new column CTA */}
