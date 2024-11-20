@@ -3,6 +3,7 @@ import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/s
 import { ConfirmProvider } from 'material-ui-confirm'
 import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
+import { BrowserRouter } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import App from '~/App.jsx'
@@ -11,22 +12,24 @@ import theme from '~/theme'
 
 createRoot(document.getElementById('root')).render(
   // <StrictMode>
-  <Provider store={store}>
-    <CssVarsProvider theme={theme}>
-      <ConfirmProvider
-        defaultOptions={{
-          allowClose: false,
-          dialogProps: { maxWidth: 'xs' },
-          confirmationButtonProps: { color: 'secondary', variant: 'outlined' },
-          cancellationButtonProps: { color: 'inherit' },
-          buttonOrder: ['confirm', 'cancel']
-        }}
-      >
-        <CssBaseline />
-        <App />
-        <ToastContainer position='bottom-left' theme='colored' />
-      </ConfirmProvider>
-    </CssVarsProvider>
-  </Provider>
+  <BrowserRouter basename='/'>
+    <Provider store={store}>
+      <CssVarsProvider theme={theme}>
+        <ConfirmProvider
+          defaultOptions={{
+            allowClose: false,
+            dialogProps: { maxWidth: 'xs' },
+            confirmationButtonProps: { color: 'secondary', variant: 'outlined' },
+            cancellationButtonProps: { color: 'inherit' },
+            buttonOrder: ['confirm', 'cancel']
+          }}
+        >
+          <CssBaseline />
+          <App />
+          <ToastContainer position='bottom-left' theme='colored' />
+        </ConfirmProvider>
+      </CssVarsProvider>
+    </Provider>
+  </BrowserRouter>
   // </StrictMode>
 )

@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography'
 import { cloneDeep } from 'loadsh'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
 import { moveCardToDifferentColumnAPI, updateBoardDetailsAPI, updateColumnDetailsAPI } from '~/apis'
 import AppBar from '~/components/AppBar/AppBar'
 import BoardBar from '~/pages/Boards/BoardBar/BoardBar'
@@ -18,11 +19,12 @@ import {
 const Board = () => {
   const dispatch = useDispatch()
   const board = useSelector(selectCurrentActiveBoard)
+  const { boardId } = useParams()
 
   useEffect(() => {
-    const boardId = '673baa23124fb358072bb960'
+    // const boardId = '673baa23124fb358072bb960'
     dispatch(fetchBoardDetailsAPI(boardId))
-  }, [dispatch])
+  }, [dispatch, boardId])
 
   /* Func này có nhiệm vụ gọi API và xử lý kéo thả Column xong xuôi */
   const moveColumns = dndOrderedColumns => {
