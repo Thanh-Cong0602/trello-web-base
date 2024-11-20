@@ -232,7 +232,7 @@ const Column = ({ column }) => {
             <Box
               sx={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
             >
-              <Button onClick={toggleNewCardForm} startIcon={<AddCardIcon />}>
+              <Button className='interceptor-loading' onClick={toggleNewCardForm} startIcon={<AddCardIcon />}>
                 Add new card
               </Button>
               <Tooltip title='Drag to move'>
