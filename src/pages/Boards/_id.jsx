@@ -1,13 +1,11 @@
-import Box from '@mui/material/Box'
-import CircularProgress from '@mui/material/CircularProgress'
 import Container from '@mui/material/Container'
-import Typography from '@mui/material/Typography'
 import { cloneDeep } from 'loadsh'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { moveCardToDifferentColumnAPI, updateBoardDetailsAPI, updateColumnDetailsAPI } from '~/apis'
 import AppBar from '~/components/AppBar/AppBar'
+import PageLoadingSpinner from '~/components/Loading/PageLoadingSpinner'
 import BoardBar from '~/pages/Boards/BoardBar/BoardBar'
 import BoardContent from '~/pages/Boards/BoardContent/BoardContent'
 import {
@@ -78,23 +76,7 @@ const Board = () => {
     })
   }
 
-  if (!board) {
-    return (
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: 2,
-          width: '100vw',
-          height: '100vh'
-        }}
-      >
-        <CircularProgress />
-        <Typography>Loading Board...</Typography>
-      </Box>
-    )
-  }
+  if (!board) return <PageLoadingSpinner caption='Loading Board...' />
 
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>

@@ -6,7 +6,9 @@ import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import Zoom from '@mui/material/Zoom'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import { registerUserAPI } from '~/apis'
 import StarlentoMascot from '~/assets/StarlentoMascot.png'
 
 function RegisterForm() {
@@ -17,8 +19,14 @@ function RegisterForm() {
     watch
   } = useForm()
 
+  const navigate = useNavigate()
   const submitLogIn = async data => {
-    console.log(data)
+    const { email, password } = data
+    toast
+      .promise(registerUserAPI({ email, password }), { pending: 'Registration is in progress...' })
+      .then(user => {
+        navigate(`/login?registeredEmail=${user.email}`)
+      })
   }
 
   return (
