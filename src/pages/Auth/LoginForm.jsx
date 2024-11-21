@@ -6,10 +6,15 @@ import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import Zoom from '@mui/material/Zoom'
 import { useForm } from 'react-hook-form'
-import { Link, useSearchParams } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import StarlentoMascot from '~/assets/StarlentoMascot.png'
+import { loginUserAPI } from '~/redux/user/userSlice'
 
 function LoginForm() {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const {
     register,
     handleSubmit,
@@ -21,7 +26,12 @@ function LoginForm() {
   const verifiedEmail = searchParams.get('verifiedEmail')
 
   const submitLogIn = async data => {
-    console.log(data)
+    const { email, password } = data
+
+    toast.promise(dispatch(loginUserAPI({ email, password })), { pending: 'Logging is...' }).then(res => {
+      console.log('🚀 ~ toast.promise ~ res:', res)
+      if (!res.error) navigate('/')
+    })
   }
 
   return (
