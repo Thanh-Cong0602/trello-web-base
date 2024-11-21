@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import Zoom from '@mui/material/Zoom'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import StarlentoMascot from '~/assets/StarlentoMascot.png'
 
 function LoginForm() {
@@ -15,6 +15,10 @@ function LoginForm() {
     handleSubmit,
     formState: { errors }
   } = useForm()
+
+  let [searchParams] = useSearchParams()
+  const registeredEmail = searchParams.get('registeredEmail')
+  const verifiedEmail = searchParams.get('verifiedEmail')
 
   const submitLogIn = async data => {
     console.log(data)
@@ -40,7 +44,7 @@ function LoginForm() {
         <Zoom in={true} style={{ transitionDelay: '200ms' }}>
           <MuiCard sx={{ minWidth: 380, maxWidth: 380, marginTop: '6em', p: '0.5em 0', borderRadius: 2 }}>
             <Box sx={{ width: '70px', bgcolor: 'white', margin: '0 auto' }}>
-              <img src={StarlentoMascot} alt='trungquandev' width='100%' />
+              <img src={StarlentoMascot} alt='Starlento' width='100%' />
             </Box>
             <Box
               sx={{
@@ -53,6 +57,38 @@ function LoginForm() {
                 <Typography>Hint: cong.it.starlento.com</Typography>
                 <Typography>Pass: tcn0602C@</Typography>
               </Box>
+            </Box>
+            <Box
+              sx={{
+                marginTop: '1em',
+                display: 'flex',
+                justifyContent: 'center',
+                flexDirection: 'column',
+                padding: '0 1em'
+              }}
+            >
+              {verifiedEmail && (
+                <Alert severity='success' sx={{ '.MuiAlert-message': { overflow: 'hidden' } }}>
+                  Your email&nbsp;
+                  <Typography variant='span' sx={{ fontWeight: 'bold', '&:hover': { color: '#fdba26' } }}>
+                    {verifiedEmail}
+                  </Typography>
+                  &nbsp;has been verified.
+                  <br />
+                  Now you can login to enjoy our services! Have a nice day!
+                </Alert>
+              )}
+
+              {registeredEmail && (
+                <Alert severity='info' sx={{ '.MuiAlert-message': { overflow: 'hidden' } }}>
+                  An email has been sent to&nbsp;
+                  <Typography variant='span' sx={{ fontWeight: 'bold', '&:hover': { color: '#fdba26' } }}>
+                    {registeredEmail}
+                  </Typography>
+                  <br />
+                  Please check and verify your account before logging in!
+                </Alert>
+              )}
             </Box>
             <Box sx={{ padding: '0 1em 1em 1em' }}>
               <Box sx={{ marginTop: '1.2em' }}>
