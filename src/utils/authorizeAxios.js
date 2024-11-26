@@ -71,7 +71,7 @@ authorizedAxiosInstance.interceptors.response.use(
           })
       }
 
-      return refreshTokenPromise.then(accessToken => {
+      return refreshTokenPromise.then(_accessToken => {
         return authorizedAxiosInstance(originalRequests)
       })
     }

@@ -12,6 +12,7 @@ import Tooltip from '@mui/material/Tooltip'
 import { useConfirm } from 'material-ui-confirm'
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 import { logoutUserAPI, selectCurrentUser } from '~/redux/user/userSlice'
 
 const Profiles = () => {
@@ -67,13 +68,13 @@ const Profiles = () => {
           'aria-labelledby': 'basis-button-profiles'
         }}
       >
-        <MenuItem sx={{ '&:hover': { color: 'success.light' } }}>
-          <Avatar
-            src={currentUser?.avatar}
-            alt='Thanh Cong Nguyen'
-            sx={{ width: '28px', height: '28px', mr: 2 }}
-          />
-          Profile
+        <Link to='/settings/account' style={{ color: 'inherit' }}>
+          <MenuItem>
+            <Avatar sx={{ width: '28px', height: '28px', mr: 2 }} /> Profile
+          </MenuItem>
+        </Link>
+        <MenuItem>
+          <Avatar sx={{ width: '28px', height: '28px', mr: 2 }} /> My account
         </MenuItem>
         <Divider />
         <MenuItem onClick={handleClose}>
