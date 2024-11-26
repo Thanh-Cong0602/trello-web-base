@@ -14,6 +14,7 @@ import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { selectCurrentUser, updateUserAPI } from '~/redux/user/userSlice'
+import { singleFileValidator } from '~/utils/validators'
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -30,13 +31,11 @@ const VisuallyHiddenInput = styled('input')({
 const AccountTab = () => {
   const dispatch = useDispatch()
   const currentUser = useSelector(selectCurrentUser)
-  const initialGeneralForm = {
-    displayName: currentUser?.displayName
-  }
+  const initialGeneralForm = { displayName: currentUser?.displayName }
+
   const {
     register,
     handleSubmit,
-    singleFileValidator,
     formState: { errors }
   } = useForm({
     defaultValues: initialGeneralForm
@@ -44,20 +43,16 @@ const AccountTab = () => {
 
   const submitChangeGeneralInformation = data => {
     const { displayName } = data
-    console.log('🚀 ~ submitChangeGeneralInformation ~ displayName:', displayName)
 
     if (displayName === currentUser?.displayName) return
 
     toast.promise(dispatch(updateUserAPI({ displayName })), { pending: 'Updating...' }).then(res => {
-      if (!res.error) {
-        toast.success('User update successfully!')
-      }
+      if (!res.error) toast.success('User update successfully!')
     })
   }
 
   const onUploadAvatar = e => {
     const error = singleFileValidator(e.target?.files[0])
-    console.log('🚀 ~ onUploadAvatar ~ e.target?.files[0]:', e.target?.files[0])
     if (error) {
       toast.error(error)
       return
@@ -67,9 +62,12 @@ const AccountTab = () => {
     console.log('🚀 ~ updateAvatar ~ reqData:', reqData)
     reqData.append('avatar', e.target.files[0])
 
-    for (const value of reqData.values()) {
-      console.log('🚀 ~ updateAvatar ~ value:', value)
-    }
+    toast.promise(dispatch(updateUserAPI(reqData)), { pending: 'Updating...' }).then(res => {
+      if (!res.error) {
+        toast.success('User update successfully!')
+      }
+    })
+    e.target.value = ''
   }
 
   return (
