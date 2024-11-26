@@ -10,6 +10,7 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
 import React from 'react'
+import { Link } from 'react-router-dom'
 import AvatarUser from '~/assets/avatar_2.jpg'
 
 const Profiles = () => {
@@ -47,9 +48,11 @@ const Profiles = () => {
           'aria-labelledby': 'basis-button-profiles'
         }}
       >
-        <MenuItem>
-          <Avatar sx={{ width: '28px', height: '28px', mr: 2 }} /> Profile
-        </MenuItem>
+        <Link to='/settings/account' style={{ color: 'inherit' }}>
+          <MenuItem>
+            <Avatar sx={{ width: '28px', height: '28px', mr: 2 }} /> Profile
+          </MenuItem>
+        </Link>
         <MenuItem>
           <Avatar sx={{ width: '28px', height: '28px', mr: 2 }} /> My account
         </MenuItem>
