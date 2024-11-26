@@ -12,7 +12,7 @@ import { useConfirm } from 'material-ui-confirm'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
-import { updateUserAPI } from '~/redux/user/userSlice'
+import { logoutUserAPI, updateUserAPI } from '~/redux/user/userSlice'
 import { FIELD_REQUIRED_MESSAGE, PASSWORD_RULE, PASSWORD_RULE_MESSAGE } from '~/utils/validators'
 
 const SecurityTab = () => {
@@ -46,7 +46,7 @@ const SecurityTab = () => {
           .then(res => {
             if (!res.error) {
               toast.success('Successfully changed your password, please login again!')
-              
+              dispatch(logoutUserAPI(false))
             }
           })
       })
