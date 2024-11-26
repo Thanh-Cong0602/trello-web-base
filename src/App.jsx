@@ -4,6 +4,7 @@ import Settings from '~/components/Settings/Settings'
 import NotFound from '~/pages/404/NotFound'
 import AccountVerification from '~/pages/Auth/AccountVerification'
 import Auth from '~/pages/Auth/Auth'
+import Boards from '~/pages/Boards'
 import Board from '~/pages/Boards/_id'
 import { selectCurrentUser } from '~/redux/user/userSlice'
 
@@ -22,6 +23,7 @@ function App() {
 
         {/* Board Details */}
         <Route path='/boards/:boardId' element={<Board />} />
+        <Route path='/boards' element={<Boards />} />
 
         {/* User Settings */}
         <Route path='/settings/account' element={<Settings />} />
