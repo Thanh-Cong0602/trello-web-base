@@ -15,6 +15,7 @@ import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { createNewBoardAPI } from '~/apis'
 import { FIELD_REQUIRED_MESSAGE } from '~/utils/validators'
 
 const SidebarItem = styled(Box)(({ theme }) => ({
@@ -37,7 +38,7 @@ const BOARD_TYPES = {
   PRIVATE: 'private'
 }
 
-function SidebarCreateBoardModal() {
+function SidebarCreateBoardModal({ afterCreateNewBoard }) {
   const {
     control,
     register,
@@ -51,12 +52,14 @@ function SidebarCreateBoardModal() {
   const handleCloseModal = () => {
     setIsOpen(false)
     reset()
+    afterCreateNewBoard()
   }
+
   const submitCreateNewBoard = data => {
-    const { title, description, type } = data
-    console.log('🚀 ~ submitCreateNewBoard ~ type:', type)
-    console.log('🚀 ~ submitCreateNewBoard ~ description:', description)
-    console.log('🚀 ~ submitCreateNewBoard ~ title:', title)
+    // const { title, description, type } = data
+    createNewBoardAPI(data).then(() => {
+      handleCloseModal()
+    })
   }
   return (
     <>
