@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom'
 import { moveCardToDifferentColumnAPI, updateBoardDetailsAPI, updateColumnDetailsAPI } from '~/apis'
 import AppBar from '~/components/AppBar/AppBar'
 import PageLoadingSpinner from '~/components/Loading/PageLoadingSpinner'
+import ActiveCard from '~/components/Modal/ActiveCard/ActiveCard'
 import BoardBar from '~/pages/Boards/BoardBar/BoardBar'
 import BoardContent from '~/pages/Boards/BoardContent/BoardContent'
 import {
@@ -13,10 +14,13 @@ import {
   selectCurrentActiveBoard,
   updateCurrentActiveBoard
 } from '~/redux/activeBoard/activeBoardSlice'
+import { selectCurrentActiveCard } from '~/redux/activeCard/activeCardSlice'
 
 const Board = () => {
   const dispatch = useDispatch()
   const board = useSelector(selectCurrentActiveBoard)
+  const activeCard = useSelector(selectCurrentActiveCard)
+
   const { boardId } = useParams()
 
   useEffect(() => {
@@ -80,6 +84,7 @@ const Board = () => {
 
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
+      {activeCard && <ActiveCard />}
       <AppBar />
       <BoardBar board={board} />
       <BoardContent

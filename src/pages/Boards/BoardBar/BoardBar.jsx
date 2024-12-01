@@ -5,13 +5,11 @@ import FormatBoldIcon from '@mui/icons-material/FormatBold'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
 import VpnLockIcon from '@mui/icons-material/VpnLock'
 import { Tooltip } from '@mui/material'
-import Avatar from '@mui/material/Avatar'
-import AvatarGroup from '@mui/material/AvatarGroup'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
-import AvatarUser from '~/assets/Avatar.jpg'
 import { capitalizeFirstLetter } from '~/utils/formatters'
+import BoardUserGroup from './BoardUserGroup'
 
 const MENU_STYPES = {
   color: 'white',
@@ -19,12 +17,8 @@ const MENU_STYPES = {
   border: 'none',
   px: '5px',
   borderRadius: '4px',
-  '.MuiSvgIcon-root': {
-    color: 'white'
-  },
-  '&:hover': {
-    backgroundColor: 'primary.50'
-  }
+  '.MuiSvgIcon-root': { color: 'white' },
+  '&:hover': { backgroundColor: 'primary.50' }
 }
 const BoardBar = ({ board }) => {
   return (
@@ -58,56 +52,7 @@ const BoardBar = ({ board }) => {
         >
           Invite
         </Button>
-
-        <AvatarGroup
-          max={7}
-          sx={{
-            gap: '10px',
-            '& .MuiAvatar-root': {
-              width: 34,
-              height: 34,
-              fontSize: 16,
-              border: 'none',
-              color: 'white',
-              cursor: 'pointer',
-              '&:first-of-type': { bgcolor: '#a4b0be' }
-            }
-          }}
-        >
-          <Tooltip title='Thanh Cong Nguyen'>
-            <Avatar alt='Thanh Cong Nguyen' src={AvatarUser} sx={{ objectFit: 'cover' }} />
-          </Tooltip>
-          <Tooltip title='Thanh Cong Nguyen'>
-            <Avatar alt='Thanh Cong Nguyen' src={AvatarUser} sx={{ objectFit: 'cover' }} />
-          </Tooltip>
-          <Tooltip title='Thanh Cong Nguyen'>
-            <Avatar alt='Thanh Cong Nguyen' src={AvatarUser} sx={{ objectFit: 'cover' }} />
-          </Tooltip>
-          <Tooltip title='Thanh Cong Nguyen'>
-            <Avatar alt='Thanh Cong Nguyen' src={AvatarUser} sx={{ objectFit: 'cover' }} />
-          </Tooltip>
-          <Tooltip title='Thanh Cong Nguyen'>
-            <Avatar alt='Thanh Cong Nguyen' src={AvatarUser} sx={{ objectFit: 'cover' }} />
-          </Tooltip>
-          <Tooltip title='Thanh Cong Nguyen'>
-            <Avatar alt='Thanh Cong Nguyen' src={AvatarUser} sx={{ objectFit: 'cover' }} />
-          </Tooltip>
-          <Tooltip title='Thanh Cong Nguyen'>
-            <Avatar alt='Thanh Cong Nguyen' src={AvatarUser} sx={{ objectFit: 'cover' }} />
-          </Tooltip>
-          <Tooltip title='Thanh Cong Nguyen'>
-            <Avatar alt='Thanh Cong Nguyen' src={AvatarUser} sx={{ objectFit: 'cover' }} />
-          </Tooltip>
-          <Tooltip title='Thanh Cong Nguyen'>
-            <Avatar alt='Thanh Cong Nguyen' src={AvatarUser} sx={{ objectFit: 'cover' }} />
-          </Tooltip>
-          <Tooltip title='Thanh Cong Nguyen'>
-            <Avatar alt='Thanh Cong Nguyen' src={AvatarUser} sx={{ objectFit: 'cover' }} />
-          </Tooltip>
-          <Tooltip title='Thanh Cong Nguyen'>
-            <Avatar alt='Thanh Cong Nguyen' src={AvatarUser} sx={{ objectFit: 'cover' }} />
-          </Tooltip>
-        </AvatarGroup>
+        <BoardUserGroup />
       </Box>
     </Box>
   )

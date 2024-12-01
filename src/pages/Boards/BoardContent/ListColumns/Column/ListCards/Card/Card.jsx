@@ -9,9 +9,12 @@ import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
 import Typography from '@mui/material/Typography'
+import { useDispatch } from 'react-redux'
 import Starlento from '~/assets/Starlento.jpg'
+import { updateCurrentActiveCard } from '~/redux/activeCard/activeCardSlice'
 
 const Card = ({ card }) => {
+  const dispatch = useDispatch()
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: card._id,
     data: { ...card }
@@ -28,8 +31,12 @@ const Card = ({ card }) => {
   const shouldShowCardActions = () => {
     return !!card?.memberIds?.length || !!card?.comments?.length || !!card?.attachments?.length
   }
+
+  const setActiveCard = () => dispatch(updateCurrentActiveCard(card))
+
   return (
     <MuiCard
+      onClick={setActiveCard}
       ref={setNodeRef}
       style={dndKitCardStyles}
       {...attributes}
