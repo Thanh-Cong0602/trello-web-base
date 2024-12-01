@@ -18,6 +18,7 @@ import { toast } from 'react-toastify'
 import { updateCardDetailsAPI } from '~/apis'
 import ToggleFocusInput from '~/components/Form/ToggleFocusInput'
 import VisuallyHiddenInput from '~/components/Form/VisuallyHiddenInput'
+import { updateCardInBoard } from '~/redux/activeBoard/activeBoardSlice'
 import {
   clearCurrentActiveCard,
   selectCurrentActiveCard,
@@ -57,10 +58,13 @@ const ActiveCard = () => {
     /* Bước 1: Cập nhật lại Card đang active trong modal hiện tại */
     dispatch(updateCurrentActiveCard(updatedCard))
     /* Bước 2: Cập nhật lại cái bản ghi card trong cái activeBoard */
+    dispatch(updateCardInBoard(updatedCard))
 
     return updatedCard
   }
   const onUpdateCardTitle = newTitle => callApiUpdateCard({ title: newTitle.trim() })
+
+  const onUpdateCardDescription = newDescription => callApiUpdateCard({ description: newDescription })
 
   const onUploadCardCover = event => {
     console.log('🚀 ~ onUploadCardCover ~ event:', event)
@@ -71,6 +75,13 @@ const ActiveCard = () => {
     }
     let reqData = new FormData()
     reqData.append('cardCover', event.target?.files[0])
+
+    toast.promise(dispatch(callApiUpdateCard(reqData))).finally(
+      () => {
+        event.target.value = ''
+      },
+      { pending: 'Updating...' }
+    )
   }
   return (
     <Modal disableScrollLock open={true} onClose={handleCloseModal} sx={{ overflowY: 'auto' }}>
@@ -132,7 +143,10 @@ const ActiveCard = () => {
               </Box>
 
               {/* Feature 03: Xử lý mô tả của Card */}
-              <CardDescriptionMdEditor />
+              <CardDescriptionMdEditor
+                CardDescriptionProp={activeCard?.description}
+                handleUpdateCardDescription={onUpdateCardDescription}
+              />
             </Box>
 
             <Box sx={{ mb: 3 }}>

@@ -1,8 +1,7 @@
 import { Avatar, Box, Popover, Tooltip } from '@mui/material'
 import { useState } from 'react'
-import AvatarUser from '~/assets/Avatar.jpg'
 
-const BoardUserGroup = ({ boardUsers = [], limit = 8 }) => {
+const BoardUserGroup = ({ boardUsers = [], limit = 4 }) => {
   const [anchorPopoverElement, setAnchorPopoverElement] = useState(null)
   const isOpenPopover = Boolean(anchorPopoverElement)
   const popoverId = isOpenPopover ? 'board-all-users-popover' : undefined
@@ -13,20 +12,20 @@ const BoardUserGroup = ({ boardUsers = [], limit = 8 }) => {
 
   return (
     <Box sx={{ display: 'flex', gap: '4px' }}>
-      {[...Array(16)].map((_, index) => {
+      {boardUsers.map((user, index) => {
         if (index < limit)
           return (
-            <Tooltip title='Thanh Cong Nguyen' key={index}>
+            <Tooltip title={user?.displayName} key={index}>
               <Avatar
                 sx={{ width: 34, height: 34, cursor: 'pointer' }}
                 alt='Thanh Cong Nguyen'
-                src={AvatarUser}
+                src={user?.avatar}
               />
             </Tooltip>
           )
       })}
 
-      {[...Array(16)].length > limit && (
+      {boardUsers.length > limit && (
         <Tooltip title='Show more'>
           <Box
             aria-describedby={popoverId}
@@ -45,7 +44,7 @@ const BoardUserGroup = ({ boardUsers = [], limit = 8 }) => {
               backgroundColor: '#a4b0be'
             }}
           >
-            +{[...Array(16)].length - limit}
+            +{boardUsers.length - limit}
           </Box>
         </Tooltip>
       )}
@@ -58,12 +57,12 @@ const BoardUserGroup = ({ boardUsers = [], limit = 8 }) => {
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       >
         <Box sx={{ p: 2, maxWidth: '235px', display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-          {[...Array(16)].map((_, index) => (
-            <Tooltip title='Thanh Cong Nguyen' key={index}>
+          {boardUsers.map((user, index) => (
+            <Tooltip title={user?.displayName} key={index}>
               <Avatar
                 sx={{ width: 34, height: 34, cursor: 'pointer' }}
                 alt='Thanh Cong Nguyen'
-                src={AvatarUser}
+                src={user?.avatar}
               />
             </Tooltip>
           ))}
