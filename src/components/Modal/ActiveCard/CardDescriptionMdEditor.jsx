@@ -1,8 +1,8 @@
-import { useState } from 'react'
-import MDEditor from '@uiw/react-md-editor'
-import { Box, Button, useColorScheme } from '@mui/material'
-import rehypeSanitize from 'rehype-sanitize'
 import EditNoteIcon from '@mui/icons-material/EditNote'
+import { Box, Button, useColorScheme } from '@mui/material'
+import MDEditor from '@uiw/react-md-editor'
+import { useState } from 'react'
+import rehypeSanitize from 'rehype-sanitize'
 
 const markdownValueExample = `
 # Markdown Editor
@@ -20,15 +20,16 @@ import MEDitor from '@uiw/react-md-editor';
 
 \`\`\`
 `
-const CardDescriptionMdEditor = () => {
+const CardDescriptionMdEditor = ({ CardDescriptionProp, handleUpdateCardDescription }) => {
   const { mode } = useColorScheme()
   const [markdownEditMode, setMarkdownEditMode] = useState(false)
-  const [cardDescription, setCardDescription] = useState(markdownValueExample)
+  const [cardDescription, setCardDescription] = useState(CardDescriptionProp)
 
   const updateCardDescription = () => {
     setMarkdownEditMode(false)
-    console.log('🚀 ~ CardDescriptionMdEditor ~ cardDescription:', cardDescription)
+    handleUpdateCardDescription(cardDescription)
   }
+
   return (
     <Box sx={{ mt: -4 }}>
       {markdownEditMode ? (
@@ -78,8 +79,8 @@ const CardDescriptionMdEditor = () => {
               source={cardDescription}
               style={{
                 whiteSpace: 'pre-wrap',
-                padding: '10px',
-                border: '0.5px solid rgba(0, 0, 0, 0.2)',
+                padding: cardDescription ? '10px' : '0px',
+                border: cardDescription ? '0.5px solid rgba(0, 0, 0, 0.2)' : 'none',
                 borderRadius: '8px'
               }}
             ></MDEditor.Markdown>
