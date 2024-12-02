@@ -14,12 +14,10 @@ import {
   selectCurrentActiveBoard,
   updateCurrentActiveBoard
 } from '~/redux/activeBoard/activeBoardSlice'
-import { selectCurrentActiveCard } from '~/redux/activeCard/activeCardSlice'
 
 const Board = () => {
   const dispatch = useDispatch()
   const board = useSelector(selectCurrentActiveBoard)
-  const activeCard = useSelector(selectCurrentActiveCard)
 
   const { boardId } = useParams()
 
@@ -84,7 +82,7 @@ const Board = () => {
 
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
-      {activeCard && <ActiveCard />}
+      <ActiveCard />
       <AppBar />
       <BoardBar board={board} />
       <BoardContent

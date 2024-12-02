@@ -3,7 +3,7 @@ import moment from 'moment'
 import { useSelector } from 'react-redux'
 import { selectCurrentUser } from '~/redux/user/userSlice'
 
-const CardActivitySection = () => {
+const CardActivitySection = ({ cardComments = [], onAddCardComment }) => {
   const currentUser = useSelector(selectCurrentUser)
   const handleAddCardComment = event => {
     if (event.key === 'Enter' && !event.shiftKey) {
@@ -15,7 +15,10 @@ const CardActivitySection = () => {
         userDisplayName: currentUser?.displayName,
         content: event.target.value.trim()
       }
-      console.log('🚀 ~ handleAddCardComment ~ commentToAdd:', commentToAdd)
+
+      onAddCardComment(commentToAdd).then(() => {
+        event.target.value = ''
+      })
     }
   }
   return (
@@ -38,28 +41,28 @@ const CardActivitySection = () => {
       </Box>
 
       {/* Hiển thị danh sách các comments */}
-      {[...Array(0)].length === 0 && (
+      {cardComments.length === 0 && (
         <Typography sx={{ pl: '45px', fontSize: '14px', fontWeight: 500, color: '#b1b1b1' }}>
           No activity found!
         </Typography>
       )}
 
-      {[...Array(6)].map((_, index) => (
+      {cardComments.map((comment, index) => (
         <Box key={index} sx={{ display: 'flex', gap: 1, width: '100%', mb: 1.5 }}>
           <Tooltip title='Thanh Cong Nguyen'>
             <Avatar
               sx={{ width: 36, height: 36, cursor: 'pointer' }}
               alt='Thanh Cong Nguyen'
-              src={currentUser?.avatar}
+              src={comment?.userAvatar}
             />
           </Tooltip>
           <Box sx={{ width: 'inherit' }}>
             <Typography variant='span' sx={{ fontWeight: 'bold', mr: 1 }}>
-              Thanh Cong Nguyen
+              {comment?.userDisplayName}
             </Typography>
 
             <Typography variant='span' sx={{ fontSize: '12px' }}>
-              {moment().format('llll')}
+              {moment(comment?.commentedAt).format('llll')}
             </Typography>
 
             <Box
@@ -74,7 +77,7 @@ const CardActivitySection = () => {
                 boxShadow: '0 0 1px rgba(0, 0, 0, 0.2)'
               }}
             >
-              This is a comment!
+              {comment?.content}
             </Box>
           </Box>
         </Box>

@@ -20,8 +20,9 @@ import ToggleFocusInput from '~/components/Form/ToggleFocusInput'
 import VisuallyHiddenInput from '~/components/Form/VisuallyHiddenInput'
 import { updateCardInBoard } from '~/redux/activeBoard/activeBoardSlice'
 import {
-  clearCurrentActiveCard,
+  clearAndHideCurrentActiveCard,
   selectCurrentActiveCard,
+  selectIsShowModalActiveCard,
   updateCurrentActiveCard
 } from '~/redux/activeCard/activeCardSlice'
 import { singleFileValidator } from '~/utils/validators'
@@ -50,7 +51,9 @@ const SidebarItem = styled(Box)(({ theme }) => ({
 const ActiveCard = () => {
   const dispatch = useDispatch()
   const activeCard = useSelector(selectCurrentActiveCard)
-  const handleCloseModal = () => dispatch(clearCurrentActiveCard())
+
+  const isShowModalActiveCard = useSelector(selectIsShowModalActiveCard)
+  const handleCloseModal = () => dispatch(clearAndHideCurrentActiveCard())
 
   const callApiUpdateCard = async updateData => {
     const updatedCard = await updateCardDetailsAPI(activeCard._id, updateData)
@@ -67,7 +70,6 @@ const ActiveCard = () => {
   const onUpdateCardDescription = newDescription => callApiUpdateCard({ description: newDescription })
 
   const onUploadCardCover = event => {
-    console.log('🚀 ~ onUploadCardCover ~ event:', event)
     const error = singleFileValidator(event.target?.files[0])
     if (error) {
       toast.error(error)
@@ -83,8 +85,16 @@ const ActiveCard = () => {
       { pending: 'Updating...' }
     )
   }
+
+  const onAddCardComment = async commentToAdd => await callApiUpdateCard({ commentToAdd })
+
   return (
-    <Modal disableScrollLock open={true} onClose={handleCloseModal} sx={{ overflowY: 'auto' }}>
+    <Modal
+      disableScrollLock
+      open={isShowModalActiveCard}
+      onClose={handleCloseModal}
+      sx={{ overflowY: 'auto' }}
+    >
       <Box
         sx={{
           position: 'relative',
@@ -157,7 +167,7 @@ const ActiveCard = () => {
                 </Typography>
               </Box>
               {/* Feature 04: Xử lý các hành động, ví dụ comment vào Card */}
-              <CardActivitySection />
+              <CardActivitySection cardComments={activeCard?.comments} onAddCardComment={onAddCardComment} />
             </Box>
           </Grid>
 

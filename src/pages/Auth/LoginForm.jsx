@@ -29,7 +29,6 @@ function LoginForm() {
     const { email, password } = data
 
     toast.promise(dispatch(loginUserAPI({ email, password })), { pending: 'Logging is...' }).then(res => {
-      console.log('🚀 ~ toast.promise ~ res:', res)
       if (!res.error) navigate('/')
     })
   }
