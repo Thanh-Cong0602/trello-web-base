@@ -9,21 +9,25 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { persistStore } from 'redux-persist'
 import { PersistGate } from 'redux-persist/integration/react'
+import { io } from 'socket.io-client'
 import App from '~/App.jsx'
 import { store } from '~/redux/store'
 import theme from '~/theme'
 import { injectStore } from '~/utils/authorizeAxios'
+import { API_ROOT } from '~/utils/constants'
 
 const persistor = persistStore(store)
 
 /* Kỹ thuật Inject Store: là kỹ thuật khi cần sử dụng biến store ở các file ngoài phạm vi component */
 injectStore(store)
 
+export const socketIoInstance = io(API_ROOT)
+
 createRoot(document.getElementById('root')).render(
   // <StrictMode>
-  <BrowserRouter basename='/'>
-    <Provider store={store}>
-      <PersistGate persistor={persistor}>
+  <Provider store={store}>
+    <PersistGate persistor={persistor}>
+      <BrowserRouter basename='/'>
         <CssVarsProvider theme={theme}>
           <ConfirmProvider
             defaultOptions={{
@@ -40,8 +44,8 @@ createRoot(document.getElementById('root')).render(
             <ToastContainer position='bottom-left' theme='colored' />
           </ConfirmProvider>
         </CssVarsProvider>
-      </PersistGate>
-    </Provider>
-  </BrowserRouter>
+      </BrowserRouter>
+    </PersistGate>
+  </Provider>
   // </StrictMode>
 )
