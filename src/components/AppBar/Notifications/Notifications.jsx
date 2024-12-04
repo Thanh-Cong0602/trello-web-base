@@ -7,7 +7,6 @@ import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { socketIoInstance } from '~/main'
 import {
   addNotification,
   fetchInvitationAPI,
@@ -15,6 +14,7 @@ import {
   updateBoardInvitationAPI
 } from '~/redux/notifications/notificationSlice'
 import { selectCurrentUser } from '~/redux/user/userSlice'
+import { socketIoInstance } from '~/socketClient'
 
 const BOARD_INVITATION_STATUS = {
   PENDING: 'PENDING',

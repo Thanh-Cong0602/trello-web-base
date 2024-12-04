@@ -3,7 +3,7 @@ import { Alert, Box, Button, Popover, TextField, Tooltip, Typography } from '@mu
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { inviteUserBoardAPI } from '~/apis'
-import { socketIoInstance } from '~/main'
+import { socketIoInstance } from '~/socketClient'
 import { EMAIL_RULE, EMAIL_RULE_MESSAGE, FIELD_REQUIRED_MESSAGE } from '~/utils/validators'
 
 const InviteBoardUser = ({ boardId }) => {
