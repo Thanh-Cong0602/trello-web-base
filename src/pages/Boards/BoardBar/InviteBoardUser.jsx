@@ -3,6 +3,7 @@ import { Alert, Box, Button, Popover, TextField, Tooltip, Typography } from '@mu
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { inviteUserBoardAPI } from '~/apis'
+import { socketIoInstance } from '~/main'
 import { EMAIL_RULE, EMAIL_RULE_MESSAGE, FIELD_REQUIRED_MESSAGE } from '~/utils/validators'
 
 const InviteBoardUser = ({ boardId }) => {
@@ -23,9 +24,11 @@ const InviteBoardUser = ({ boardId }) => {
   const submitInviteUserToBoard = data => {
     const { inviteeEmail } = data
 
-    inviteUserBoardAPI({ inviteeEmail, boardId }).then(() => {
+    inviteUserBoardAPI({ inviteeEmail, boardId }).then(invitation => {
       setValue('inviteeEmail', '')
       setAnchorPopoverElement(null)
+
+      socketIoInstance.emit('FE_USER_INVITED_TO_BOARD', invitation)
     })
   }
   return (
