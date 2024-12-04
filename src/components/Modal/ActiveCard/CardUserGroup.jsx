@@ -1,9 +1,12 @@
+import { CheckCircle } from '@mui/icons-material'
 import AddIcon from '@mui/icons-material/Add'
-import { Avatar, Box, Tooltip } from '@mui/material'
+import { Avatar, Badge, Box, Popover, Tooltip } from '@mui/material'
 import { useState } from 'react'
-import AvatarUser from '~/assets/Avatar.jpg'
+import { useSelector } from 'react-redux'
+import { selectCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
+import { CARD_MEMBER_ACTIONS } from '~/utils/constants'
 
-const CardUserGroup = ({ cardMemberIds = [] }) => {
+const CardUserGroup = ({ cardMemberIds = [], onUpdateCardMembers }) => {
   const [anchorPopoverElement, setAnchorPopoverElement] = useState(null)
   const isOpenPopover = Boolean(anchorPopoverElement)
   const popoverId = isOpenPopover ? 'card-all-users-popover' : undefined
@@ -13,11 +16,26 @@ const CardUserGroup = ({ cardMemberIds = [] }) => {
     else setAnchorPopoverElement(null)
   }
 
+  const board = useSelector(selectCurrentActiveBoard)
+  const FE_CardMembers = board?.FE_allUsers?.filter(user => cardMemberIds.includes(user._id))
+
+  const handleUpdateCardMembers = user => {
+    const incomingUserInfo = {
+      userId: user._id,
+      action: cardMemberIds.includes(user._id) ? CARD_MEMBER_ACTIONS.REMOVE : CARD_MEMBER_ACTIONS.ADD
+    }
+
+    onUpdateCardMembers(incomingUserInfo)
+  }
   return (
     <Box sx={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
-      {[...Array(8)].map((_, index) => (
-        <Tooltip title='Thanh Cong Nguyen' key={index}>
-          <Avatar sx={{ width: 34, height: 34, cursor: 'pointer' }} alt='Thanh Cong Nguyen' src={AvatarUser} />
+      {FE_CardMembers?.map((user, index) => (
+        <Tooltip title={user?.displayName} key={index}>
+          <Avatar
+            sx={{ width: 34, height: 34, cursor: 'pointer' }}
+            src={user.avatar}
+            alt={user?.displayName}
+          />
         </Tooltip>
       ))}
 
@@ -47,6 +65,34 @@ const CardUserGroup = ({ cardMemberIds = [] }) => {
           <AddIcon fontSize='small' />
         </Box>
       </Tooltip>
+
+      <Popover
+        id={popoverId}
+        open={isOpenPopover}
+        anchorEl={anchorPopoverElement}
+        onClose={handleTogglePopover}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+      >
+        <Box sx={{ p: 2, maxWidth: '260px', display: 'flex', flexWrap: 'wrap', gap: 1.5 }}>
+          {board?.FE_allUsers.map((user, index) => (
+            <Tooltip title={user.displayName} key={index}>
+              <Badge
+                sx={{ cursor: 'pointer' }}
+                overlap='rectangular'
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                badgeContent={
+                  cardMemberIds.includes(user._id) ? (
+                    <CheckCircle fontSize='small' sx={{ color: '#27ae60' }} />
+                  ) : null
+                }
+                onClick={() => handleUpdateCardMembers(user)}
+              >
+                <Avatar sx={{ width: 34, height: 34 }} src={user.avatar} alt='User' />
+              </Badge>
+            </Tooltip>
+          ))}
+        </Box>
+      </Popover>
     </Box>
   )
 }
